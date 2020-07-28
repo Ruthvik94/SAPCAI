@@ -34,47 +34,43 @@ const Button = ({ button, sendMessage, readOnlyMode }) => {
   const formattedTitle = truncate(title, 80)
   const tooltip = title && title.length > 80 ? title : null
 
-  if (button.type === 'web_url' && sanitizeUrl(value) === 'about:blank') {
+  /* if (button.type === 'web_url' && sanitizeUrl(value) === 'about:blank') {
     return null
-  }
+  } */
 
   let content = null
 
   // https://sapjira.wdf.sap.corp/browse/SAPMLCONV-4781 - Support the pnonenumber options
-  const linkClassName = cx('RecastAppButton-Link CaiAppButton-Link', { 'CaiAppButton--ReadOnly': readOnlyMode })
+  const linkClassName = cx('RecastAppButton-Link CaiAppButton-Link', {
+    'CaiAppButton--ReadOnly': readOnlyMode,
+  })
   const { href, target } = _getUrlInfo(button, readOnlyMode)
   switch (type) {
-  case 'phonenumber':
-    content = (
-      <a
-        className={linkClassName}
-        href={_getValidTelHref(button, readOnlyMode)}>
-        {formattedTitle}
-      </a>
-    )
-    break
-  case 'web_url':
-    content = (
-      <a
-        className={linkClassName}
-        href={href}
-        target={target}
-        rel='noopener noreferrer'>
-        {formattedTitle}
-      </a>
-    )
-    break
-  default:
-    content = (
-      <div
-        title={tooltip}
-        className={cx('RecastAppButton CaiAppButton', { 'CaiAppButton--ReadOnly': readOnlyMode })}
-        onClick={() => sendMessage({ type: 'button', content: button }, title)}
-      >
-        {formattedTitle}
-      </div>
-    )
-    break
+    case 'phonenumber':
+      content = (
+        <a className={linkClassName} href={_getValidTelHref(button, readOnlyMode)}>
+          {formattedTitle}
+        </a>
+      )
+      break
+    case 'web_url':
+      content = (
+        <a className={linkClassName} href={href} target={target} rel="noopener noreferrer">
+          {formattedTitle}
+        </a>
+      )
+      break
+    default:
+      content = (
+        <div
+          title={tooltip}
+          className={cx('RecastAppButton CaiAppButton', { 'CaiAppButton--ReadOnly': readOnlyMode })}
+          onClick={() => sendMessage({ type: 'button', content: button }, title)}
+        >
+          {formattedTitle}
+        </div>
+      )
+      break
   }
 
   return content

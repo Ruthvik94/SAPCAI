@@ -1,0 +1,15 @@
+.RecastApp .RecastAppInput,
+.CaiApp .CaiAppInput {
+  .RecastScreenShotButtonContainer,
+  .CaiScreenShotButtonContainer {
+    cursor: pointer;
+    display: flex;
+    padding-right: 0.5rem;
+  }
+
+  .RecastScreenShotButton,
+  .CaiScreenShotButton {
+    width: 19px;
+    height: 22px;
+  }
+}

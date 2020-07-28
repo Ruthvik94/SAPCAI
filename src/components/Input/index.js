@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import append from 'ramda/es/append'
 
 import SendButton from 'components/SendButton'
+import ScreenShotButton from 'components/ScreenshotButton'
 
 import Menu from 'components/Menu'
 import MenuSVG from 'components/svgs/menu'
@@ -23,14 +24,14 @@ class Input extends Component {
     menuIndexes: [],
   }
 
-  static getDerivedStateFromProps (props, state) {
+  static getDerivedStateFromProps(props, state) {
     if (!props.isOpen) {
       return { isOpen: props.isOpen, hasFocus: false }
     }
     return { isOpen: props.isOpen }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     if (this.state.isOpen) {
       this.setFocusState()
     }
@@ -39,16 +40,16 @@ class Input extends Component {
     this.onInputHeight()
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return (
-      nextState.value !== this.state.value
-      || nextState.menuOpened !== this.state.menuOpened
-      || nextState.menuIndexes.length !== this.state.menuIndexes.length
-      || nextState.isOpen !== this.state.isOpen
+      nextState.value !== this.state.value ||
+      nextState.menuOpened !== this.state.menuOpened ||
+      nextState.menuIndexes.length !== this.state.menuIndexes.length ||
+      nextState.isOpen !== this.state.isOpen
     )
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     if (this.state.isOpen) {
       this.setFocusState()
     }
@@ -64,7 +65,7 @@ class Input extends Component {
     this.onInputHeight()
   }
 
-  setFocusState () {
+  setFocusState() {
     if (!this.state.hasFocus && this._input) {
       setTimeout(() => {
         this._input.focus()
@@ -99,7 +100,7 @@ class Input extends Component {
       onInputHeight(this.inputContainer.clientHeight)
     }
   }
-  sendMenuSelection = (action) => {
+  sendMenuSelection = action => {
     if (action) {
       this.props.onSubmit(action)
     }
@@ -195,7 +196,7 @@ class Input extends Component {
     return this.setState({ menuOpened: true })
   }
 
-  render () {
+  render() {
     const { enableHistoryInput, characterLimit, menu, preferences, inputPlaceholder } = this.props
     const { value, menuOpened } = this.state
 
@@ -205,7 +206,7 @@ class Input extends Component {
 
     return (
       <div
-        className='RecastAppInput CaiAppInput'
+        className="RecastAppInput CaiAppInput"
         ref={ref => {
           this.inputContainer = ref
         }}
@@ -222,6 +223,7 @@ class Input extends Component {
           />
         )}
 
+        <ScreenShotButton preferences={preferences} value={value} />
         <textarea
           ref={i => (this._input = i)}
           value={value}
@@ -246,14 +248,10 @@ class Input extends Component {
           rows={1}
         />
 
-        <SendButton
-          preferences={preferences}
-          sendMessage={this.sendMessage}
-          value={value}
-        />
+        <SendButton preferences={preferences} sendMessage={this.sendMessage} value={value} />
 
         {showLimitCharacter && (
-          <div className='characterLimit'>{characterLimit - value.length}</div>
+          <div className="characterLimit">{characterLimit - value.length}</div>
         )}
       </div>
     )
