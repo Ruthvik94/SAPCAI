@@ -3,9 +3,6 @@ import { Provider } from 'react-redux'
 import { store } from 'store'
 import { createStore } from 'redux'
 import reducers from './reducers'
-import ScreenCapture from 'components/ScreenCapture'
-
-import ScreenCapture from './context/ScreenCapture'
 
 import Webchat from './containers/App'
 
@@ -21,12 +18,9 @@ export default class CaiWebchat extends Component {
   }
 
   render() {
-    const context = useContext(ScreenContext)
-
     return (
       <Provider store={this.store}>
         <Webchat {...this.props} />
-        <ScreenCapture on={context.on} controlCaptue={context.controlCaptue} />
       </Provider>
     )
   }

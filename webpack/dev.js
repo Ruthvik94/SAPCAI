@@ -5,7 +5,6 @@ const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const env = process.env.NODE_ENV || 'development'
 
 module.exports = {
-
   entry: ['./src/script.js'],
 
   devtool: 'cheap-module-eval-source-map',
@@ -21,30 +20,33 @@ module.exports = {
   },
 
   module: {
-    rules: [{
-      test: /\.js$/,
-      loader: 'babel-loader',
-      exclude: /node-modules/,
-      options: {
-        presets: ['@babel/react'],
-        cacheDirectory: true,
-      },
-    }, {
-      test: /\.scss$/,
-      use: [
-        'style-loader',
-        'css-loader',
-        {
-          loader: 'postcss-loader',
-          options: {
-            ident: 'postcss',
-            plugins: () => [require('autoprefixer')],
-          },
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node-modules/,
+        options: {
+          presets: ['@babel/react'],
+          cacheDirectory: true,
         },
-        'sass-loader',
-      ],
-      exclude: /node_modules/,
-    }],
+      },
+      {
+        test: /\.(scss|css)$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: () => [require('autoprefixer')],
+            },
+          },
+          'sass-loader',
+        ],
+        exclude: /node_modules/,
+      },
+    ],
   },
 
   plugins: [
@@ -55,5 +57,4 @@ module.exports = {
       'process.env': { NODE_ENV: JSON.stringify(env) },
     }),
   ],
-
 }

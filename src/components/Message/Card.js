@@ -37,7 +37,7 @@ const Card = ({ content, sendMessage, onImageLoaded, readOnlyMode }) => {
             downloadInNewWindow="true"
             downloadUrl={imageUrl}
             changeable="false"
-            zIndex="100"
+            zIndex="5000"
             images={[{ src: imageUrl }]}
           />
         </React.Fragment>

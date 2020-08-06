@@ -32,3 +32,7 @@ export default store => next => action => {
       throw new Error(err)
     })
 }
+
+export function sendImage(data) {
+  axios.post('/image', data)
+}

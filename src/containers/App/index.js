@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+import { ScreenProvider } from 'context/ScreenContext'
+import Cropper from 'components/Cropper'
+
 import Chat from 'containers/Chat'
 import Expander from 'components/Expander'
 import { setFirstMessage, removeAllMessages } from 'actions/messages'
@@ -10,26 +13,29 @@ import { getCredentialsFromLocalStorage } from 'helpers'
 
 import './style.scss'
 
-const NO_LOCALSTORAGE_MESSAGE
-  = 'Sorry, your browser does not support web storage. Are you in localhost ?'
+const NO_LOCALSTORAGE_MESSAGE =
+  'Sorry, your browser does not support web storage. Are you in localhost ?'
 
 @connect(
   state => ({
     isReady: state.conversation.conversationId,
-    }),
+  }),
   {
-  setCredentials,
-  setFirstMessage,
-  createConversation,
-  removeAllMessages,
+    setCredentials,
+    setFirstMessage,
+    createConversation,
+    removeAllMessages,
   },
 )
 class App extends Component {
   state = {
     expanded: this.props.expanded || false,
     isReady: null,
+    capture: false,
+    setCapture: () => {},
+    url: '',
   }
-  static getDerivedStateFromProps (props, state) {
+  static getDerivedStateFromProps(props, state) {
     const { isReady, preferences } = props
 
     // Since the conversation is only created after the first submit
@@ -39,28 +45,28 @@ class App extends Component {
       let expanded = null
 
       switch (preferences.openingType) {
-      case 'always':
-        expanded = true
-        break
-      case 'never':
-        expanded = false
-        break
-      case 'memory':
-        if (window.localStorage) {
-          expanded = localStorage.getItem('isChatOpen') === 'true'
-        } else {
-          console.log(NO_LOCALSTORAGE_MESSAGE)
-        }
-        break
-      default:
-        break
+        case 'always':
+          expanded = true
+          break
+        case 'never':
+          expanded = false
+          break
+        case 'memory':
+          if (window.localStorage) {
+            expanded = localStorage.getItem('isChatOpen') === 'true'
+          } else {
+            console.log(NO_LOCALSTORAGE_MESSAGE)
+          }
+          break
+        default:
+          break
       }
       return { expanded, isReady }
     }
     return { isReady }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     const { channelId, token, preferences, noCredentials, onRef } = this.props
     const credentials = getCredentialsFromLocalStorage(channelId)
     const payload = { channelId, token }
@@ -87,9 +93,13 @@ class App extends Component {
     }
 
     this.props.setCredentials(payload)
+
+    this.setState({
+      setCapture: this.handleCapture.bind(this, this.state),
+    })
   }
 
-  componentDidUpdate (prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const { onToggle, conversationHistoryId } = this.props
 
     if (prevState.expanded !== this.state.expanded) {
@@ -104,7 +114,7 @@ class App extends Component {
     }
   }
 
-  componentDidCatch (error, info) {
+  componentDidCatch(error, info) {
     console.log(error, info)
   }
 
@@ -121,7 +131,16 @@ class App extends Component {
     this.props.removeAllMessages()
   }
 
-  render () {
+  handleCapture = (_state, param) => {
+    const state = { ...this.state }
+    const { capture } = state
+    this.setState({
+      capture: !capture,
+      url: param,
+    })
+  }
+
+  render() {
     const {
       preferences,
       containerMessagesStyle,
@@ -142,51 +161,54 @@ class App extends Component {
       defaultMessageDelay,
       readOnlyMode,
     } = this.props
-    const { expanded } = this.state
+    const { expanded, capture, setCapture, url } = this.state
 
     return (
-      <div className='RecastApp CaiApp'>
-        <link
-          rel='stylesheet'
-          type='text/css'
-          href='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'
-        />
-        <link
-          rel='stylesheet'
-          type='text/css'
-          href='https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'
-        />
+      <ScreenProvider value={{ setCapture, url }}>
+        <Cropper visible={capture} handleVisible={setCapture} url={url} />
 
-        <Expander
-          show={!expanded}
-          onClick={this.toggleChat}
-          preferences={preferences}
-          style={expanderStyle}
-        />
+        <div className="RecastApp CaiApp" style={capture ? { display: 'none' } : null}>
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+          />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+          />
 
-        <Chat
-          show={expanded}
-          closeWebchat={this.toggleChat}
-          preferences={preferences}
-          containerMessagesStyle={containerMessagesStyle}
-          containerStyle={containerStyle}
-          logoStyle={logoStyle}
-          showInfo={showInfo}
-          onClickShowInfo={onClickShowInfo}
-          sendMessagePromise={sendMessagePromise}
-          loadConversationHistoryPromise={loadConversationHistoryPromise}
-          primaryHeader={primaryHeader}
-          secondaryView={secondaryView}
-          secondaryHeader={secondaryHeader}
-          secondaryContent={secondaryContent}
-          getLastMessage={getLastMessage}
-          enableHistoryInput={enableHistoryInput}
-          defaultMessageDelay={defaultMessageDelay}
-          conversationHistoryId={conversationHistoryId}
-          readOnlyMode={readOnlyMode}
+          <Expander
+            show={!expanded}
+            onClick={this.toggleChat}
+            preferences={preferences}
+            style={expanderStyle}
+          />
 
-        />
-      </div>
+          <Chat
+            show={expanded}
+            closeWebchat={this.toggleChat}
+            preferences={preferences}
+            containerMessagesStyle={containerMessagesStyle}
+            containerStyle={containerStyle}
+            logoStyle={logoStyle}
+            showInfo={showInfo}
+            onClickShowInfo={onClickShowInfo}
+            sendMessagePromise={sendMessagePromise}
+            loadConversationHistoryPromise={loadConversationHistoryPromise}
+            primaryHeader={primaryHeader}
+            secondaryView={secondaryView}
+            secondaryHeader={secondaryHeader}
+            secondaryContent={secondaryContent}
+            getLastMessage={getLastMessage}
+            enableHistoryInput={enableHistoryInput}
+            defaultMessageDelay={defaultMessageDelay}
+            conversationHistoryId={conversationHistoryId}
+            readOnlyMode={readOnlyMode}
+          />
+        </div>
+      </ScreenProvider>
     )
   }
 }

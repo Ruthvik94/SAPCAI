@@ -17,7 +17,7 @@ module.exports = {
     publicPath: '/lib/',
     library: ['webchat'],
     libraryTarget: 'umd',
-    globalObject: 'typeof self !== \'undefined\' ? self : this',
+    globalObject: "typeof self !== 'undefined' ? self : this",
   },
   module: {
     rules: [
@@ -31,11 +31,7 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ],
+        loader: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
         exclude: /node_modules/,
       },
     ],
