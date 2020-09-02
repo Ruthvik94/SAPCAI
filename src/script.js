@@ -28,9 +28,6 @@ if (root && channelId && token) {
   getChannelPreferences(channelId, token).then(preferences => {
     ReactDOM.render(
       <Provider store={store}>
-        <div id="canvas">
-          <h1>Hi</h1>
-        </div>
         <App
           token={token}
           channelId={channelId}

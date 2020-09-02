@@ -1,21 +1,21 @@
-.editor {
+.cropperEditor {
   height: 100%;
 }
 
-.canvas {
+.cropperCanvas {
   align-items: center;
   display: flex;
   height: 100%;
   justify-content: center;
-  z-index: 5000;
+  z-index: 9;
 }
 
-.canvas > img {
+.cropperCanvas > img {
   max-height: 100%;
   max-width: 100%;
 }
 
-.toolbar {
+.cropperToolbar {
   background-color: rgba(0, 0, 0, 0.5);
   bottom: 1rem;
   color: #fff;
@@ -24,10 +24,10 @@
   margin-left: -8rem;
   position: absolute;
   width: 16rem;
-  z-index: 2015;
+  z-index: 9;
 }
 
-.toolbar__button {
+.cropperToolbar__button {
   background-color: transparent;
   border-width: 0;
   color: #fff;
@@ -40,11 +40,11 @@
   width: 2rem;
 }
 
-.toolbar__button:focus {
+.cropperToolbar__button:focus {
   outline: none;
 }
 
-.toolbar__button:hover {
+.cropperToolbar__button:hover {
   background-color: #0074d9;
   color: #fff;
 }

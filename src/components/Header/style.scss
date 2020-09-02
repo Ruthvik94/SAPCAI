@@ -1,7 +1,9 @@
-.RecastApp .RecastAppHeader, .CaiApp .CaiAppHeader {
+.RecastApp .RecastAppHeader,
+.CaiApp .CaiAppHeader {
   display: flex;
   align-items: center;
   border-radius: 0;
+  cursor: move;
 
   &--logo {
     height: 50px;
@@ -20,10 +22,35 @@
     width: 15px;
     height: 15px;
   }
+
+  &--btnA {
+    cursor: pointer;
+    margin: 1rem;
+    width: 20px;
+    height: 20px;
+  }
+
+  &--btnA:hover .tooltiptext {
+    visibility: visible;
+  }
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #eff4f9;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  top: 2.5rem;
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
 }
 
 @media only screen and (min-width: 420px) and (min-height: 575px) {
-  .RecastApp .RecastAppHeader, .CaiApp .CaiAppHeader {
+  .RecastApp .RecastAppHeader,
+  .CaiApp .CaiAppHeader {
     border-radius: 3px 3px 0 0;
   }
 }

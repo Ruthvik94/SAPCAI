@@ -10,18 +10,15 @@ import './style.scss'
 const Buttons = ({ content, sendMessage, style, readOnlyMode }) => {
   const { title, buttons } = content
   return (
-    <div className='Buttons'>
-      <p className='Buttons--title' style={style}>
+    <div className="Buttons">
+      <p className="Buttons--title" style={style}>
         {truncate(title, 640)}
       </p>
 
-      <div className='Buttons--container'>
-        {safeArrayOfItem(buttons).slice(0, 3).map((b, i) => (
-          <Button
-            key={i}
-            button={b}
-            sendMessage={sendMessage}
-            readOnlyMode={readOnlyMode} />
+      <div className="Buttons--container">
+        {/* {safeArrayOfItem(buttons).slice(0, 3).map((b, i) => ( */}
+        {safeArrayOfItem(buttons).map((b, i) => (
+          <Button key={i} button={b} sendMessage={sendMessage} readOnlyMode={readOnlyMode} />
         ))}
       </div>
     </div>

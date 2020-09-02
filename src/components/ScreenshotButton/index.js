@@ -1,13 +1,17 @@
 import React, { useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 import domtoimage from 'dom-to-image'
-
 import Loader from 'react-loader-spinner'
+import Dropdown from 'react-bootstrap/Dropdown'
+
 import ScreenContext from 'context/ScreenContext'
 
+import Plus from 'components/svgs/plus'
+import Picture from 'components/svgs/picture'
+import Information from 'components/svgs/information'
 import './style.scss'
 
-const onCaptureScreenShot = (context, setLoad) => {
+const onCaptureScreenShot = (context, setLoad, botMessage) => {
   // var node = document.body
   var node = document.getElementById('canvas')
 
@@ -16,14 +20,14 @@ const onCaptureScreenShot = (context, setLoad) => {
     .then(function(dataUrl) {
       // console.log(dataUrl);
       setLoad(false)
-      context.setCapture(dataUrl)
+      context.setCapture(dataUrl, botMessage)
     })
     .catch(function(error) {
       console.error('oops, something went wrong!', error)
     })
 }
 
-const ScreenShotButton = ({ preferences, value }) => {
+const ScreenShotButton = ({ preferences, value, sendMessage, updateStateWithBotMessage }) => {
   const context = useContext(ScreenContext)
   const [load, setLoad] = useState(false)
   return (
@@ -31,19 +35,54 @@ const ScreenShotButton = ({ preferences, value }) => {
       {!load ? (
         <div className="RecastScreenShotButtonContainer CaiScreenShotButtonContainer">
           <div className="RecastScreenShotButton CaiScreenShotButton">
-            <svg
-              onClick={() => {
-                setLoad(true)
-                onCaptureScreenShot(context, setLoad)
-              }}
-              style={{
-                width: 23,
-                fill: value ? preferences.accentColor : preferences.botMessageColor,
-              }}
-              viewBox="0 0 24 24"
-            >
-              <path d="M 0 2 L 0 22 L 24 22 L 24 2 Z M 2 4 L 22 4 L 22 20 L 2 20 Z M 17 7 C 15.894531 7 15 7.894531 15 9 C 15 10.105469 15.894531 11 17 11 C 18.105469 11 19 10.105469 19 9 C 19 7.894531 18.105469 7 17 7 Z M 7.875 9.78125 L 4 12.53125 L 4 18 L 20 18 L 20 14.84375 L 15.9375 12.375 L 12.53125 13.90625 Z" />
-            </svg>
+            <Dropdown>
+              <Dropdown.Toggle
+                variant="secondary"
+                id="dropdown-basic"
+                style={{ height: '-webkit-fill-available', paddingTop: '1px', width: '20px' }}
+              >
+                <Plus />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  style={{ padding: '0.75rem' }}
+                  onClick={() => {
+                    setLoad(true)
+                    onCaptureScreenShot(context, setLoad, updateStateWithBotMessage)
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      paddingRight: '0.3rem',
+                    }}
+                  >
+                    <Picture preferences={preferences} value={value} />
+                  </span>
+                  Screenshot
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  style={{ padding: '0.75rem' }}
+                  onClick={() => {
+                    sendMessage('Report an Incident')
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      paddingRight: '0.3rem',
+                    }}
+                  >
+                    <Information preferences={preferences} value={value} />
+                  </span>
+                  Report Incident
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
       ) : (

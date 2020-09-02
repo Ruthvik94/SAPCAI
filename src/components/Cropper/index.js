@@ -2,11 +2,22 @@ import React, { Component } from 'react'
 import NavBar from './NavBar/index'
 import Editor from './Editor/index'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 
-import { sendImage } from '../../middlewares/api'
+import { addBotMessage } from 'actions/messages'
+/* import { sendEmail } from 'middlewares/api'
+import Config from 'config/body.json' */
 
 import './style.scss'
 
+@connect(
+  state => ({
+    messages: state.messages,
+  }),
+  {
+    addBotMessage,
+  },
+)
 class Cropper extends Component {
   state = {
     show: '',
@@ -20,31 +31,66 @@ class Cropper extends Component {
     cropped: false,
     cropping: false,
     loaded: true,
-    name: 'test.png',
+    name: 'issue.png',
     previousUrl: '',
     type: 'image/png',
     url: '',
+
+    mailIndex: '',
+
+    messages: this.props.messages,
   }
 
   constructor(props) {
     super(props)
-    // this.refs.editor = React.createRef()
     this.editor = React.createRef()
   }
 
-  componentWillUpdate() {
-    this.editor = React.createRef()
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.url !== this.state.url) {
-      this.setState({ url: nextProps.url })
+  static getDerivedStateFromProps(props, state) {
+    const { messages } = props
+    if (state.url === '' || state.url === undefined) {
+      return {
+        url: props.url,
+        messages,
+      }
     }
+    return { messages }
   }
 
-  change = action => {
+  shouldComponentUpdate(nextProps, nextState) {
+    const { url, canvasData, cropBoxData, croppedData, cropped, cropping } = this.state
+    const {
+      url: nextUrl,
+      canvasData: nextCanvasD,
+      cropBoxData: nextCropBoxD,
+      croppedData: nextCroppedD,
+      cropped: nextCropped,
+      cropping: nextCropping,
+    } = nextState
+
+    if (nextProps.url !== this.state.url) {
+      return true
+    }
+
+    if (
+      url !== nextUrl ||
+      canvasData !== nextCanvasD ||
+      cropBoxData !== nextCropBoxD ||
+      croppedData ||
+      nextCroppedD ||
+      cropped !== nextCropped ||
+      cropping !== nextCropping
+    ) {
+      return true
+    }
+
+    return false
+  }
+
+  change = async action => {
     const { current: editor } = this.editor
-    const { url } = this.state
+    const { url, messages } = this.state
+    const { handleVisible, addBotMessage } = this.props
 
     switch (action) {
       case 'crop':
@@ -76,18 +122,116 @@ class Cropper extends Component {
           url: '',
         })
 
-        const { handleVisible } = this.props
         handleVisible()
         break
 
+      case 'attach':
+        const quickReply = {
+          type: 'quickReplies',
+          markdown: true,
+          content: {
+            title: '**Do you want to Submit Ticket**',
+            buttons: [
+              { value: 'SendMail', title: 'Yes', url: url },
+              { value: 'DontSendMail', title: 'No' },
+            ],
+          },
+        }
+
+        const data = {
+          type: 'picture',
+          content: url,
+          error: false,
+        }
+
+        const lastMessage = messages[messages.length - 1]
+        const lastMessageAttachment = lastMessage.attachment
+
+        const check =
+          lastMessage && lastMessageAttachment.type === 'text'
+            ? lastMessageAttachment.content.includes('Please take a snapshot')
+            : false
+
+        this.updateState(addBotMessage([data]), '', true)
+        handleVisible()
+        if (check) {
+          this.updateState(addBotMessage([quickReply]), '', true)
+        }
+        break
+
       case 'mail':
-        sendImage({ url: url })
+      /* const data = {
+          type: 'picture',
+          content: url,
+          error: false,
+        } */
+
+      /* const filtered = messages.filter(i => {
+          if (
+            i.attachment &&
+            i.attachment.content ===
+              'Please take a screenshot by clicking on plus button and screenshot'
+          ) {
+            return i
+          }
+        }) */
+
+      /* const subject = messages.filter(i => {
+          if (
+            i.attachment &&
+            i.attachment.content.length > 10 &&
+            i.attachment.content.length < 30
+          ) {
+            return i
+          }
+        }) */
+
+      /* const mailMessage = {
+          content: `**Email sent**\nTicket 46${filtered.length} successfully created.`,
+          markdown: true,
+          type: 'text',
+          error: false,
+        }
+
+        const lastScShIndex = filtered.length
+
+        Config.Messages[0].Attachments[0].Base64Content = url.split(',')[1]
+        Config.Messages[0].Subject = `Incident Details: ${
+          subject[subject.length - 1].attachment.content
+        }`
+        this.updateState(addBotMessage([data]), '', true)
+
+        handleVisible()
+        if (lastScShIndex !== 0 && mailIndex !== lastScShIndex) {
+          sendEmail(Config)
+          this.updateState(addBotMessage([mailMessage]), lastScShIndex, true)
+        } */
       default:
     }
   }
 
-  updateState = state => {
-    this.setState(state)
+  updateState = (state, mailIndex, whetherBotMessage) => {
+    if (whetherBotMessage) {
+      this.setState(prevState => {
+        return {
+          canvasData: null,
+          cropBoxData: null,
+          croppedData: null,
+          cropper: null,
+          cropped: false,
+          cropping: false,
+
+          previousUrl: '',
+          url: '',
+
+          mailIndex,
+
+          messages: [...prevState.messages, state],
+        }
+      })
+    } else {
+      this.setState(state)
+    }
   }
 
   render() {
@@ -97,12 +241,12 @@ class Cropper extends Component {
     if (!visible) return null
 
     return (
-      <div className="app body">
-        <header className="header">
-          <span className="title">Edit</span>
+      <div className="caiCropper cropperBody">
+        <header className="cropperHeader">
+          <span className="cropperTitle">Edit</span>
           <NavBar data={data} change={this.change.bind(this)} />
         </header>
-        <main className="main">
+        <main className="cropperMain">
           <Editor ref={this.editor} data={data} update={this.updateState.bind(this)} />
         </main>
       </div>

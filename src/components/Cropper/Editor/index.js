@@ -3,24 +3,9 @@ import Cropper from 'cropperjs'
 
 import './style.scss'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
-import { faCrop } from '@fortawesome/free-solid-svg-icons'
-import { faSearchPlus } from '@fortawesome/free-solid-svg-icons'
-import { faSearchMinus } from '@fortawesome/free-solid-svg-icons'
-import { faUndo } from '@fortawesome/free-solid-svg-icons'
-import { faRedo } from '@fortawesome/free-solid-svg-icons'
-import { faArrowsAltH } from '@fortawesome/free-solid-svg-icons'
-import { faArrowsAltV } from '@fortawesome/free-solid-svg-icons'
-
 class Editor extends Component {
   constructor(props) {
     super(props)
-    // this.refs.image = React.createRef()
-    this.image = React.createRef()
-  }
-
-  componentWillUpdate() {
     this.image = React.createRef()
   }
 
@@ -174,8 +159,8 @@ class Editor extends Component {
     const { data } = this.props
 
     return (
-      <div className="editor">
-        <div className="canvas" dblclick={this.dblclick}>
+      <div className="cropperEditor">
+        <div className="cropperCanvas" dblclick={this.dblclick}>
           <img
             ref={this.image}
             alt={data.name}
@@ -185,57 +170,61 @@ class Editor extends Component {
           />
         </div>
 
-        <div className="toolbar" onClick={this.onClick.bind(this)}>
-          <button className="toolbar__button" data-action="move" title="Move (M)">
+        <div className="cropperToolbar" onClick={this.onClick.bind(this)}>
+          <button className="cropperToolbar__button" data-action="move" title="Move (M)">
             <span>
-              <FontAwesomeIcon icon={faArrowsAlt} />
-              {/* <img src="https://img.icons8.com/dotty/80/000000/move.png" /> */}
+              <i className="fa fa-arrows-alt" aria-hidden="true"></i>
             </span>
           </button>
-          <button className="toolbar__button" data-action="crop" title="Crop (C)">
+          <button className="cropperToolbar__button" data-action="crop" title="Crop (C)">
             <span>
-              <FontAwesomeIcon icon={faCrop} />
-              {/* <img src="https://img.icons8.com/metro/26/000000/crop.png" /> */}
+              <i className="fa fa-crop" aria-hidden="true"></i>
             </span>
           </button>
-          <button className="toolbar__button" data-action="zoom-in" title="Zoom In (I)">
+          <button className="cropperToolbar__button" data-action="zoom-in" title="Zoom In (I)">
             <span>
-              <FontAwesomeIcon icon={faSearchPlus} />
-              {/* <img src="https://img.icons8.com/carbon-copy/100/000000/zoom-in.png" /> */}
+              <i className="fa fa-search-plus" aria-hidden="true"></i>
             </span>
           </button>
-          <button className="toolbar__button" data-action="zoom-out" title="Zoom Out (O)">
+          <button className="cropperToolbar__button" data-action="zoom-out" title="Zoom Out (O)">
             <span>
-              <FontAwesomeIcon icon={faSearchMinus} />
-              {/* <img src="https://img.icons8.com/metro/26/000000/zoom-out.png" /> */}
-            </span>
-          </button>
-          <button className="toolbar__button" data-action="rotate-left" title="Rotate Left (L)">
-            <span>
-              <FontAwesomeIcon icon={faUndo} />
-              {/* <img src="https://img.icons8.com/material-sharp/24/000000/undo.png" /> */}
-            </span>
-          </button>
-          <button className="toolbar__button" data-action="rotate-right" title="Rotate Right (R)">
-            <span>
-              <FontAwesomeIcon icon={faRedo} />
-              {/* <img src="https://img.icons8.com/material-sharp/24/000000/redo.png" /> */}
+              <i className="fa fa-search-minus" aria-hidden="true"></i>
             </span>
           </button>
           <button
-            className="toolbar__button"
+            className="cropperToolbar__button"
+            data-action="rotate-left"
+            title="Rotate Left (L)"
+          >
+            <span>
+              <i className="fa fa-undo" aria-hidden="true"></i>
+            </span>
+          </button>
+          <button
+            className="cropperToolbar__button"
+            data-action="rotate-right"
+            title="Rotate Right (R)"
+          >
+            <span>
+              <i className="fa fa-repeat" aria-hidden="true"></i>
+            </span>
+          </button>
+          <button
+            className="cropperToolbar__button"
             data-action="flip-horizontal"
             title="Flip Horizontal (H)"
           >
             <span>
-              <FontAwesomeIcon icon={faArrowsAltH} />
-              {/* <img src="https://img.icons8.com/metro/26/000000/horizontal-line.png" /> */}
+              <i className="fa fa-arrows-h" aria-hidden="true"></i>
             </span>
           </button>
-          <button className="toolbar__button" data-action="flip-vertical" title="Flip Vertical (V)">
+          <button
+            className="cropperToolbar__button"
+            data-action="flip-vertical"
+            title="Flip Vertical (V)"
+          >
             <span>
-              <FontAwesomeIcon icon={faArrowsAltV} />
-              {/* <img src="https://img.icons8.com/ios-filled/50/000000/thick-vertical-line.png" /> */}
+              <i className="fa fa-arrows-v" aria-hidden="true"></i>
             </span>
           </button>
         </div>

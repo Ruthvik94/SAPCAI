@@ -1,0 +1,47 @@
+{
+  "Messages": [
+    {
+      "From": {
+        "Email": "deepak.bhargava@gds.ey.com",
+        "Name": "Fiori User"
+      },
+      "To": [
+        {
+          "Email": "Deepak.Bhargava@gds.ey.com",
+          "Name": "Deepak"
+        },
+        {
+          "Email": "Rama.Majety@gds.ey.com",
+          "Name": "Lavanya"
+        },
+        {
+          "Email": "Karan.Bahl@gds.ey.com",
+          "Name": "Karan"
+        },
+        {
+          "Email": "Ruthvik.Kumar@gds.ey.com",
+          "Name": "Ruthvik"
+        }
+      ],
+      "TemplateID": 1609554,
+      "TemplateLanguage": true,
+      "Subject": "Incident Details: Unable to load Fiori app",
+      "Attachments": [
+        {
+          "ContentType": "image/png",
+          "Filename": "Fiori_Issue.png",
+          "ContentID": "id1",
+          "Base64Content": ""
+        }
+      ],
+
+      "Variables": {
+        "name": "\"]]</title><!--[if !mso]><!-- --><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"><!--<![endif]--><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><style type=\"text/css",
+        "firstname": "Default value",
+        "total_price": "Default value",
+        "order_date": "Default value",
+        "order_id": "Default value"
+      }
+    }
+  ]
+}

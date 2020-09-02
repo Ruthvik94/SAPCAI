@@ -105,8 +105,13 @@ class Input extends Component {
       this.props.onSubmit(action)
     }
   }
-  sendMessage = () => {
-    const content = this.state.value.trim()
+  sendMessage = expression => {
+    let content
+    if (expression) {
+      content = expression
+    } else {
+      content = this.state.value.trim()
+    }
     if (content) {
       this.props.onSubmit({
         type: 'text',
@@ -222,8 +227,12 @@ class Input extends Component {
             postbackClick={action => this.sendMenuSelection(action)}
           />
         )}
-
-        <ScreenShotButton preferences={preferences} value={value} />
+        {/* <ScreenShotButton
+          preferences={preferences}
+          value={value}
+          sendMessage={this.sendMessage}
+          updateStateWithBotMessage={updateStateWithBotMessage}
+        /> */}
         <textarea
           ref={i => (this._input = i)}
           value={value}
@@ -247,8 +256,11 @@ class Input extends Component {
           }}
           rows={1}
         />
-
-        <SendButton preferences={preferences} sendMessage={this.sendMessage} value={value} />
+        <SendButton
+          preferences={preferences}
+          sendMessage={() => this.sendMessage(value)}
+          value={value}
+        />
 
         {showLimitCharacter && (
           <div className="characterLimit">{characterLimit - value.length}</div>

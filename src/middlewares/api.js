@@ -33,6 +33,7 @@ export default store => next => action => {
     })
 }
 
-export function sendImage(data) {
-  axios.post('/image', data)
+export const sendEmail = data => {
+  axios.post('https://binbuildjs.cfapps.us10.hana.ondemand.com/mail', { data })
+  // https://binbuildjs.cfapps.us10.hana.ondemand.com/mail
 }

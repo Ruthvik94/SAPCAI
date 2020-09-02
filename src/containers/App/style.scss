@@ -1,7 +1,7 @@
 .RecastApp,
 .CaiApp {
   // z-index: 2147483647;
-  z-index: 1000;
+  z-index: 9;
 }
 
 .RecastApp *,
@@ -20,12 +20,12 @@
 
 .RecastApp a,
 .CaiApp a {
-  text-decoration: underline;
+  // text-decoration: underline;
   cursor: pointer;
 
-  &:hover {
+  /* &:hover {
     text-decoration: underline;
-  }
+  } */
 }
 
 .RecastApp img,

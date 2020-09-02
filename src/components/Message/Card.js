@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { sanitizeUrl } from '@braintree/sanitize-url'
+// import { sanitizeUrl } from '@braintree/sanitize-url'
 import Viewer from 'react-viewer'
 
 import { truncate, safeArrayOfItem } from 'helpers'
@@ -12,9 +12,12 @@ const Card = ({ content, sendMessage, onImageLoaded, readOnlyMode }) => {
 
   const { title, subtitle, imageUrl, buttons } = content
 
-  // if (imageUrl && sanitizeUrl(imageUrl) === 'about:blank') {
-  //   return null
-  // }
+  /* 
+    //commenting to allow base64 url to be processed
+    if (imageUrl && sanitizeUrl(imageUrl) === 'about:blank') {
+      return null
+    } 
+  */
   // https://sapjira.wdf.sap.corp/browse/SAPMLCONV-6296
   // Need to check if buttons is null before rendering the button html.
   return (
@@ -37,7 +40,7 @@ const Card = ({ content, sendMessage, onImageLoaded, readOnlyMode }) => {
             downloadInNewWindow="true"
             downloadUrl={imageUrl}
             changeable="false"
-            zIndex="5000"
+            zIndex="9"
             images={[{ src: imageUrl }]}
           />
         </React.Fragment>

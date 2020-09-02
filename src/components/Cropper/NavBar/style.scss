@@ -1,8 +1,8 @@
-.navbar {
+.cropperNavbar {
   float: right;
 }
 
-.nav__button {
+.cropperNav__button {
   background-color: transparent;
   border-width: 0;
   color: #fff;
@@ -15,19 +15,19 @@
   width: 3rem;
 }
 
-.nav__button:focus {
+.cropperNav__button:focus {
   outline: none;
 }
 
-.nav__button:hover {
+.cropperNav__button:hover {
   background-color: #0074d9;
   color: #fff;
 }
 
-.nav--success:hover {
+.cropperNav--success:hover {
   background-color: #2ecc40;
 }
 
-.nav--danger:hover {
+.cropperNav--danger:hover {
   background-color: #ff4136;
 }
