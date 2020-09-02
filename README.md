@@ -67,6 +67,9 @@ $> npm install
 
 ```
 $> npm run start
+
+In a separate terminal
+$> node index
 ```
 
 #### Eslint + prettier
