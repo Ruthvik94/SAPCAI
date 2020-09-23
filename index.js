@@ -2,10 +2,7 @@ const express = require('express')
 var bodyParser = require('body-parser')
 var cors = require('cors')
 
-// var sapcai = require('sapcai').default
-// var build = new sapcai.build('545a900b85e3bda24eef99df191cb27a')
-// const request = require('superagent')
-// var connect = new sapcai.connect('545a900b85e3bda24eef99df191cb27a')
+const { Translate } = require('@google-cloud/translate').v2
 
 const mailjet = require('node-mailjet').connect(
   '18aaf76dc1ab7f304707bb9ca8001037',
@@ -20,6 +17,10 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }))
 
 app.use(express.static('./'))
 
+const translate = new Translate({
+  key: 'AIzaSyB-Ai9mav72daWPO9z1fv55WJ7__9dyNEk',
+})
+
 app.post('/mail', function(req, res) {
   const data = req.body.data
   const request = mailjet.post('send', { version: 'v3.1' }).request(data)
@@ -33,38 +34,16 @@ app.post('/mail', function(req, res) {
     })
 })
 
-app.post('/image', function(req, res) {
-  /* const URL_PREFIX = 'https://api.cai.tools.sap/connect/v1/conversations'
-  const chatId = req.body.chatId
-  const data = req.body.data
+app.post('/convert_initial', async ({ body }, res) => {
+  const message = body.message
+  const language = body.language
 
-  request
-    .post(`${URL_PREFIX}/${chatId}/messages`)
-    .send({ messages: [data] })
-    .set('Authorization', '545a900b85e3bda24eef99df191cb27a')
-    .end(function(err, res) {
-      console.log('sent')
-    }) */
-})
-
-app.post('/issue', function(req, res) {
-  console.log(req.body.nlp.source)
-  debugger
-  res.send({
-    conversation: {
-      memory: {
-        issue: {
-          value: req.body.nlp.source,
-        },
-      },
-      replies: [
-        {
-          type: 'text',
-          content: req.body.nlp.source,
-        },
-      ],
-    },
-  })
+  try {
+    const output = await translate.translate(message, language)
+    res.status(200).send(output)
+  } catch (err) {
+    res.status(400).send(err)
+  }
 })
 
 app.listen(port, () => {

@@ -17,6 +17,21 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+
+    <script>
+      window.webchatMethods = {
+        // called at each user message
+        getMemory: conversationId => {
+          const memory = {
+            userName: 'Ruthvik Kumar',
+            userId: 123456,
+            setFirstMessage: true,
+            language: 'DE',
+          }
+          return { memory, merge: true }
+        },
+      }
+    </script>
     <title>React App</title>
   </head>
 

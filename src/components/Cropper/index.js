@@ -158,54 +158,6 @@ class Cropper extends Component {
           this.updateState(addBotMessage([quickReply]), '', true)
         }
         break
-
-      case 'mail':
-      /* const data = {
-          type: 'picture',
-          content: url,
-          error: false,
-        } */
-
-      /* const filtered = messages.filter(i => {
-          if (
-            i.attachment &&
-            i.attachment.content ===
-              'Please take a screenshot by clicking on plus button and screenshot'
-          ) {
-            return i
-          }
-        }) */
-
-      /* const subject = messages.filter(i => {
-          if (
-            i.attachment &&
-            i.attachment.content.length > 10 &&
-            i.attachment.content.length < 30
-          ) {
-            return i
-          }
-        }) */
-
-      /* const mailMessage = {
-          content: `**Email sent**\nTicket 46${filtered.length} successfully created.`,
-          markdown: true,
-          type: 'text',
-          error: false,
-        }
-
-        const lastScShIndex = filtered.length
-
-        Config.Messages[0].Attachments[0].Base64Content = url.split(',')[1]
-        Config.Messages[0].Subject = `Incident Details: ${
-          subject[subject.length - 1].attachment.content
-        }`
-        this.updateState(addBotMessage([data]), '', true)
-
-        handleVisible()
-        if (lastScShIndex !== 0 && mailIndex !== lastScShIndex) {
-          sendEmail(Config)
-          this.updateState(addBotMessage([mailMessage]), lastScShIndex, true)
-        } */
       default:
     }
   }
