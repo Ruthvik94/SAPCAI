@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { store } from 'store'
 
+import SpeechService from './service/speechToText'
 import { getConverted } from 'middlewares/api'
 
 import { getChannelPreferences } from 'actions/channel'
@@ -27,6 +28,8 @@ const token = script.getAttribute('token')
 const lang = window.webchatMethods.getMemory().memory.language
 const user = window.webchatMethods.getMemory().memory.userName
 
+const speech = SpeechService(lang)
+
 const welcomeMessage = `Welcome Aboard ${user}! This is Genie - How may I help you?`
 
 const readOnly = false
@@ -47,6 +50,7 @@ if (root && channelId && token) {
             channelId={channelId}
             preferences={preferences}
             readOnlyMode={readOnly}
+            speech={speech}
           />
         </Provider>,
         root,

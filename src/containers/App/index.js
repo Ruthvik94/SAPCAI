@@ -160,6 +160,7 @@ class App extends Component {
       enableHistoryInput,
       defaultMessageDelay,
       readOnlyMode,
+      speech,
     } = this.props
     const { expanded, capture, setCapture, url } = this.state
 
@@ -211,6 +212,7 @@ class App extends Component {
             defaultMessageDelay={defaultMessageDelay}
             conversationHistoryId={conversationHistoryId}
             readOnlyMode={readOnlyMode}
+            speech={speech}
           />
         </div>
       </ScreenProvider>
@@ -243,6 +245,7 @@ App.propTypes = {
   enableHistoryInput: PropTypes.bool,
   readOnlyMode: PropTypes.bool,
   defaultMessageDelay: PropTypes.number,
+  speech: PropTypes.object,
 }
 
 export default App

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import append from 'ramda/es/append'
 
 import SendButton from 'components/SendButton'
-import ScreenShotButton from 'components/ScreenshotButton'
+import MicButton from 'components/MicButton'
 
 import Menu from 'components/Menu'
 import MenuSVG from 'components/svgs/menu'
@@ -233,6 +233,7 @@ class Input extends Component {
           sendMessage={this.sendMessage}
           updateStateWithBotMessage={updateStateWithBotMessage}
         /> */}
+        <MicButton preferences={preferences} sendMessage={this.sendMessage} />
         <textarea
           ref={i => (this._input = i)}
           value={value}

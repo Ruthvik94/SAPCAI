@@ -5,6 +5,7 @@ import pathOr from 'ramda/es/pathOr'
 
 import Message from 'components/Message'
 import IsTyping from 'components/Message/isTyping'
+import IsStreaming from 'components/MicButton/isStreaming'
 
 import './style.scss'
 
@@ -12,22 +13,25 @@ class Live extends Component {
   state = {
     showTyping: false,
   }
-  static getDerivedStateFromProps (props, state) {
+  static getDerivedStateFromProps(props, state) {
     if (props.messages.length !== state.msgLength) {
       // only show the busy indicate if the count increase.
       // (on error the cancel will remove the message, so we do not want the busy indicator)
-      return { showTyping: props.messages.length > state.msgLength, msgLength: props.messages.length }
+      return {
+        showTyping: props.messages.length > state.msgLength,
+        msgLength: props.messages.length,
+      }
     }
     return null
   }
-  componentDidMount () {
+  componentDidMount() {
     if (this.messagesList) {
       this.messagesList.scrollTop = this.messagesList.scrollHeight
     }
     window.addEventListener('resize', this.handleScroll)
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (prevProps.messages.length !== this.props.messages.length) {
       if (this.messagesList) {
         this.messagesList.scrollTop = this.messagesList.scrollHeight
@@ -35,7 +39,7 @@ class Live extends Component {
     }
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     window.removeEventListener('resize', this.handleScroll)
   }
 
@@ -70,7 +74,7 @@ class Live extends Component {
     )
   }
 
-  render () {
+  render() {
     const {
       messages,
       sendMessage,
@@ -81,32 +85,33 @@ class Live extends Component {
       showInfo,
       onClickShowInfo,
       readOnlyMode,
+      showStreaming,
     } = this.props
     const { showTyping } = this.state
     const lastMessage = messages.slice(-1)[0]
 
-    const sendMessagePromiseCondition
-      = lastMessage
-      && (pathOr(false, ['data', 'hasDelay'], lastMessage)
+    const sendMessagePromiseCondition =
+      lastMessage &&
+      (pathOr(false, ['data', 'hasDelay'], lastMessage)
         ? pathOr(false, ['data', 'hasNextMessage'], lastMessage)
         : lastMessage.participant.isBot === false)
     const pollMessageCondition = lastMessage && pathOr(false, ['attachment', 'delay'], lastMessage)
     const shouldDisplayTyping = !!(
-      lastMessage
-      && (sendMessagePromiseCondition || pollMessageCondition)
-      && !lastMessage.retry
-      && !lastMessage.isSending
-      && showTyping
+      lastMessage &&
+      (sendMessagePromiseCondition || pollMessageCondition) &&
+      !lastMessage.retry &&
+      !lastMessage.isSending &&
+      showTyping
     )
 
     return (
       <div
-        className='RecastAppLive CaiAppLive'
+        className="RecastAppLive CaiAppLive"
         ref={ref => (this.messagesList = ref)}
         onScroll={this.handleScroll}
         style={containerMessagesStyle}
       >
-        <div className='RecastAppLive--message-container CaiAppLive--message-container'>
+        <div className="RecastAppLive--message-container CaiAppLive--message-container">
           {this.fmtMessages().map((message, index) => (
             <Message
               key={message.id}
@@ -133,6 +138,10 @@ class Live extends Component {
               callAfterTimeout={() => this.setState({ showTyping: false })}
               timeout={20000}
             />
+          )}
+
+          {showStreaming && (
+            <IsStreaming image={preferences.botPicture} onImageLoaded={this.onImageLoaded} />
           )}
         </div>
       </div>

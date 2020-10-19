@@ -34,11 +34,11 @@ export default store => next => action => {
 }
 
 export const sendEmail = data => {
-  axios.post('https://binbuildjs.cfapps.eu10.hana.ondemand.com/mail', { data })
+  axios.post('https://webchatjs.cfapps.eu10.hana.ondemand.com/mail', { data })
 }
 
 export const getConverted = (message, language) => {
-  return axios.post('https://binbuildjs.cfapps.eu10.hana.ondemand.com/convert_initial', {
+  return axios.post('https://webchatjs.cfapps.eu10.hana.ondemand.com/convert_initial', {
     message,
     language,
   })

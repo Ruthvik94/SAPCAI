@@ -7,6 +7,7 @@ import concat from 'ramda/es/concat'
 import { storeCredentialsToLocalStorage } from 'helpers'
 import { createConversation } from 'actions/conversation'
 
+import { InputProvider } from 'context/InputContext'
 import Config from 'config/body.json'
 import { sendEmail } from 'middlewares/api'
 
@@ -54,6 +55,7 @@ class Chat extends Component {
     messages: this.props.messages,
     showSlogan: true,
     inputHeight: 50, // height of input (default: 50px)
+    showStreaming: false,
   }
 
   constructor(props) {
@@ -512,6 +514,13 @@ class Chat extends Component {
     }
   }
 
+  toggleStreaming() {
+    const { showStreaming } = this.state
+    this.setState({
+      showStreaming: !showStreaming,
+    })
+  }
+
   render() {
     const {
       closeWebchat,
@@ -528,8 +537,9 @@ class Chat extends Component {
       show,
       enableHistoryInput,
       readOnlyMode,
+      speech,
     } = this.props
-    const { showSlogan, messages, inputHeight } = this.state
+    const { showSlogan, messages, inputHeight, showStreaming, setStreaming } = this.state
 
     return (
       <div
@@ -574,6 +584,7 @@ class Chat extends Component {
                   onClickShowInfo={onClickShowInfo}
                   containerMessagesStyle={containerMessagesStyle}
                   readOnlyMode={readOnlyMode}
+                  showStreaming={showStreaming}
                 />,
                 <div
                   key="slogan"
@@ -587,16 +598,20 @@ class Chat extends Component {
               ]}
         </div>
         {!readOnlyMode && (
-          <Input
-            menu={preferences.menu && preferences.menu.menu}
-            isOpen={show}
-            onSubmit={this.sendMessage}
-            preferences={preferences}
-            onInputHeight={height => this.setState({ inputHeight: height })}
-            enableHistoryInput={enableHistoryInput}
-            inputPlaceholder={propOr('Write a reply', 'userInputPlaceholder', preferences)}
-            characterLimit={propOr(0, 'characterLimit', preferences)}
-          />
+          <InputProvider
+            value={{ setStreaming: this.toggleStreaming.bind(this), showStreaming, speech }}
+          >
+            <Input
+              menu={preferences.menu && preferences.menu.menu}
+              isOpen={show}
+              onSubmit={this.sendMessage}
+              preferences={preferences}
+              onInputHeight={height => this.setState({ inputHeight: height })}
+              enableHistoryInput={enableHistoryInput}
+              inputPlaceholder={propOr('Write a reply', 'userInputPlaceholder', preferences)}
+              characterLimit={propOr(0, 'characterLimit', preferences)}
+            />
+          </InputProvider>
         )}
       </div>
     )
@@ -628,6 +643,7 @@ Chat.propTypes = {
   enableHistoryInput: PropTypes.bool,
   readOnlyMode: PropTypes.bool,
   defaultMessageDelay: PropTypes.number,
+  speech: PropTypes.object,
 }
 
 export default Chat

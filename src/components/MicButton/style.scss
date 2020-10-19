@@ -1,0 +1,15 @@
+.RecastApp .RecastAppInput,
+.CaiApp .CaiAppInput {
+  .RecastMicButtonContainer,
+  .CaiMicButtonContainer {
+    cursor: pointer;
+    display: flex;
+  }
+
+  .RecastMicButton,
+  .CaiMicButton {
+    width: 22px;
+    height: 22px;
+    padding: 2px;
+  }
+}
